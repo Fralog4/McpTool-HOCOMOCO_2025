@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "hocomoco": {
+      "command": "java",
+      "args": [
+        "-jar",
+        "C:\\Users\\Utente\\Desktop\\McpHOCOMOCO_2025\\build\\libs\\mcp-hocomoco-all-all.jar"
+      ]
+    }
+  }
+}
