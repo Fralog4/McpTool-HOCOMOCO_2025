@@ -1,11 +1,6 @@
 package org.example.server
 
-import io.ktor.client.request.invoke
-import io.modelcontextprotocol.kotlin.sdk.CallToolResult
-import io.modelcontextprotocol.kotlin.sdk.Implementation
-import io.modelcontextprotocol.kotlin.sdk.ServerCapabilities
-import io.modelcontextprotocol.kotlin.sdk.TextContent
-import io.modelcontextprotocol.kotlin.sdk.Tool
+import io.modelcontextprotocol.kotlin.sdk.*
 import io.modelcontextprotocol.kotlin.sdk.server.Server
 import io.modelcontextprotocol.kotlin.sdk.server.ServerOptions
 import io.modelcontextprotocol.kotlin.sdk.server.StdioServerTransport
@@ -14,11 +9,7 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.io.asSink
 import kotlinx.io.asSource
 import kotlinx.io.buffered
-import kotlinx.serialization.json.add
-import kotlinx.serialization.json.buildJsonArray
-import kotlinx.serialization.json.buildJsonObject
-import kotlinx.serialization.json.jsonPrimitive
-import kotlinx.serialization.json.put
+import kotlinx.serialization.json.*
 import org.example.client.McpHOCOMOCOClientImpl
 import org.example.service.McpHOCOMOCOService
 
@@ -41,18 +32,18 @@ fun createServer(): Server {
         McpHOCOMOCOService()
     )
 
-    // Definizione dello schema di input del tool
+    // Definition of schema input
     val getMotifsInput = Tool.Input(
         buildJsonObject {
             put("type", "object")
             put("properties", buildJsonObject {
                 put("filePath", buildJsonObject {
                     put("type", "string")
-                    put("description", "Path al file MEME contenente i motifs")
+                    put("description", "Path to the MEME file which contains the motifs")
                 })
                 put("sequence", buildJsonObject {
                     put("type", "string")
-                    put("description", "Sequenza genomica target (ACGT)")
+                    put("description", "Target genomic sequence (ACGT)")
                 })
             })
             put("required", buildJsonArray {
@@ -62,21 +53,21 @@ fun createServer(): Server {
         }
     )
 
-    // Registrazione del tool
+    // Tool registration
     server.addTool(
         "getMotifs",
-        "Scansiona una sequenza con i motifs definiti in un file MEME",
+        "Make a scan of the sequence with the motifs defined in a MEME file",
         getMotifsInput
     ) { input ->
         val filePath = input.arguments["filePath"]!!.jsonPrimitive.content
         val sequence = input.arguments["sequence"]!!.jsonPrimitive.content
 
-        // Chiamo il service attraverso il client
+        // Call the service through the client
         val results = client.service.scanMotifsInSequence(filePath, sequence)
 
         CallToolResult(
             listOf(
-                TextContent("Risultati scansione: $results")
+                TextContent("Results: $results")
             )
         )
     }

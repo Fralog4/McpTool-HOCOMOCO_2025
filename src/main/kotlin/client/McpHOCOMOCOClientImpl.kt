@@ -19,31 +19,34 @@ class McpHOCOMOCOClientImpl(
     val service: McpHOCOMOCOService
 ) : McpHOCOMOCOClient {
 
-    private val file = "" //o glieli passi nel costruttore? Da capire come lo voglio chiamare sto Client
-    private val sequenceTarget = ""
+    private val file = "" //prompt level for now
+    private val sequenceTarget = "" //prompt level for now
 
-    private val bridgeUrl = "https://192.168.178.162"
 
-    private val client = HttpClient(CIO) {
-        install(ContentNegotiation) {
-            json()
-        }
-        engine {
-            https {
-                trustManager = object : X509TrustManager {
-                    override fun checkClientTrusted(chain: Array<out X509Certificate?>?, authType: String?) {
-                        // Accetta tutti i certificati
-                    }
+    /**
+     * We actually do not need all this stuff for local execution.
+     * I'll leave it here for a day we could host this somewhere, idk.
+     */
 
-                    override fun checkServerTrusted(chain: Array<out X509Certificate?>?, authType: String?) {
-                        // Accetta tutti i certificati
-                    }
-
-                    override fun getAcceptedIssuers(): Array<X509Certificate> = arrayOf()
-                }
-            }
-        }
-    } //a che minchia serve sta cosa non l'ho capito bisogna indagare
+//    private val bridgeUrl = "https://192.168.178.162"
+//
+//    private val client = HttpClient(CIO) {
+//        install(ContentNegotiation) {
+//            json()
+//        }
+//        engine {
+//            https {
+//                trustManager = object : X509TrustManager {
+//                    override fun checkClientTrusted(chain: Array<out X509Certificate?>?, authType: String?) {
+//                    }
+//
+//                    override fun checkServerTrusted(chain: Array<out X509Certificate?>?, authType: String?) {}
+//
+//                    override fun getAcceptedIssuers(): Array<X509Certificate> = arrayOf()
+//                }
+//            }
+//        }
+//    }
 
     //Tool
 //    override suspend fun getMotifs() {
@@ -66,7 +69,7 @@ class McpHOCOMOCOClientImpl(
     //Tool
     override suspend fun getMotifs() {
         val results = service.scanMotifsInSequence(file, sequenceTarget)
-        println("Motifs trovati: $results")
+        println("Motifs: $results")
     }
 
 
@@ -79,7 +82,5 @@ class McpHOCOMOCOClientImpl(
     override suspend fun getMotifBySequence() {
         TODO("Not yet implemented")
     }
-
-    //considera che forse ci vorrà un claude_desktop_config.json
 
 }

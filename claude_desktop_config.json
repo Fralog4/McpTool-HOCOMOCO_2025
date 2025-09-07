@@ -4,7 +4,7 @@
       "command": "java",
       "args": [
         "-jar",
-        "C:\\Users\\Utente\\Desktop\\McpHOCOMOCO_2025\\build\\libs\\mcp-hocomoco-all-all.jar"
+        "{YOUR_ABSOLUTE_PATH}\\McpHOCOMOCO_2025\\build\\libs\\mcp-hocomoco-all-all.jar"
       ]
     }
   }
